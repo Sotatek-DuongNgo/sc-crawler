@@ -1,0 +1,56 @@
+{
+  "name": "sc-crawler",
+  "version": "0.0.1",
+  "description": "Crawl events for specific contract ",
+  "author": "duong.ngo@sotatek.com",
+  "scripts": {
+    "typeorm": "ts-node --files -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "migration:up": "yarn typeorm migration:run",
+    "migration:down": "yarn typeorm migration:revert",
+    "migration:create": "yarn typeorm migration:create -n",
+    "lint": "tslint -c tslint.json 'libs/**/*.ts' 'bin/**/*.ts'",
+    "fix": "yarn lint -- --fix",
+    "build": "rm -rf dist/bin dist/libs && tsc",
+    "release": "release-it -n"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@types/assert": "1.4.1",
+    "@types/node": "^10.12.18",
+    "eslint": "5.9.0",
+    "eslint-config-airbnb": "17.1.0",
+    "eslint-config-airbnb-base": "13.1.0",
+    "eslint-config-populist": "4.1.0",
+    "eslint-config-prettier": "3.3.0",
+    "eslint-plugin-import": "2.14.0",
+    "eslint-plugin-jsx-a11y": "6.1.2",
+    "eslint-plugin-prettier": "3.0.0",
+    "eslint-plugin-react": "7.11.1",
+    "node": "11.6.0",
+    "nyc": "^14.1.1",
+    "prettier": "1.15.3",
+    "ts-node": "^7.0.1",
+    "tsconfig-paths": "^3.12.0",
+    "tslint": "5.11.0",
+    "tslint-config-prettier": "1.17.0",
+    "tslint-eslint-rules": "5.4.0",
+    "tslint-plugin-prettier": "2.0.1",
+    "typescript": "^3.2.2"
+  },
+  "dependencies": {
+    "@babel/preset-env": "^7.5.5",
+    "@types/lodash": "^4.14.136",
+    "@types/sqlite3": "3.1.5",
+    "bignumber.js": "^9.0.1",
+    "dotenv": "^10.0.0",
+    "dotenv-safe": "^6.1.0",
+    "express": "^4.17.1",
+    "p-limit": "2.2.0",
+    "pg": "^8.7.3",
+    "typeorm": "^0.2.44",
+    "web3": "^1.6.1"
+  },
+  "repository": {
+    "type": "git"
+  }
+}

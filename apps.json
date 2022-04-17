@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "crawl-airdrop-events",
+      "script": "ts-node src/AirdropCrawler.ts",
+      "node_args": ""
+    }
+  ]
+}
