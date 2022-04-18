@@ -82,15 +82,33 @@ export class createContractEvents1650166964822 implements MigrationInterface {
         await queryRunner.createIndex(
             "contract_events",
             new TableIndex({
-                name: "IDX_EVENT_NAME",
+                name: "IDX_address",
+                columnNames: ["address"],
+            })
+        );
+
+        await queryRunner.createIndex(
+            "contract_events",
+            new TableIndex({
+                name: "IDX_event",
                 columnNames: ["event"],
+            })
+        );
+
+        await queryRunner.createIndex(
+            "contract_events",
+            new TableIndex({
+                name: "IDX_address_event",
+                columnNames: ["address", "event"],
             })
         );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropTable('contract_events');
-        await queryRunner.dropIndex("contract_events", "IDX_EVENT_NAME");
+        await queryRunner.dropIndex("contract_events", "IDX_address");
+        await queryRunner.dropIndex("contract_events", "IDX_event");
+        await queryRunner.dropIndex("contract_events", "IDX_address_event");
     }
 
 }

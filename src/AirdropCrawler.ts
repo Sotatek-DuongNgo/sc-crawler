@@ -22,8 +22,28 @@ const getLatestCrawledBlockNumber = async (): Promise<number> => {
     return +lastCrawler.blockNumber;
 }
 
+const isValidBlockNumber = async (): Promise<boolean> => {
+    const blockNumberLastCrawled = await getLatestCrawledBlockNumber();
+    const latestEvent = await getRepository(ContractEvent).findOne({
+        where: {
+            address: config.CONTRACT.AIRDROP.address
+        },
+        order: {
+            blockNumber: 'DESC'
+        }
+    }) || { blockNumber: 0 };
+
+    return blockNumberLastCrawled >= latestEvent.blockNumber;
+}
+
 const start = async (): Promise<void> => {
     console.log(`Start crawling events of airdrop contract!!!`);
+
+    const isValid = await isValidBlockNumber();
+    if (!isValid) {
+        console.log('Seem as block number is invalid.');
+        return;
+    }
 
     const crawlerOpts: IEventLogCrawlerOptions = {
         onEventLogCrawled,

@@ -1,16 +1,19 @@
 import {
     Entity,
     Column,
+    Index,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
     CreateDateColumn
 } from 'typeorm';
 
 @Entity('contract_events')
+@Index(['address', 'event'])
 export class ContractEvent {
     @PrimaryGeneratedColumn()
     public id: number;
 
+    @Index()
     @Column({ name: 'address', nullable: false })
     public address: string;
 
@@ -32,6 +35,7 @@ export class ContractEvent {
     @Column({ name: 'event_id', nullable: false })
     public eventId: string;
 
+    @Index()
     @Column({ name: 'event', nullable: false })
     public event: string;
 
