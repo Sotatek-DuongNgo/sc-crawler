@@ -1,8 +1,13 @@
 {
   "apps": [
     {
-      "name": "crawl-airdrop-events",
+      "name": "CrawlAirdropEvent",
       "script": "ts-node src/AirdropCrawler.ts",
+      "node_args": ""
+    },
+    {
+      "name": "WebhookWorker",
+      "script": "ts-node src/WebhookWorker.ts",
       "node_args": ""
     }
   ]

@@ -29,6 +29,45 @@ export const currentSecond = () => {
     return Math.floor(Date.now() / 1000);
 }
 
+export const nowInMillis = () => {
+    return (Date.now() / 1000) | 0;
+}
+
 export const sleeping = (ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export function reflect(promise: any) {
+  return promise
+    .then((data: any) => {
+      return { data, status: 'resolved' };
+    })
+    .catch((error: any) => {
+      return { error, status: 'rejected' };
+    });
+}
+
+/**
+ * promise all and handle error message
+ * @param values
+ * @constructor
+ */
+export async function PromiseAll(values: any[]): Promise<any[]> {
+  let results: any[];
+  await (async () => {
+    return await Promise.all(values.map(reflect));
+  })().then(async res => {
+    const errors: any[] = [];
+    results = res.map(r => {
+      if (r.status === 'rejected') {
+        errors.push(r.error);
+      }
+      return r.data;
+    });
+    if (errors.length !== 0) {
+      // have lots of error, throw first error
+      throw errors[0];
+    }
+  });
+  return results;
 }

@@ -3,13 +3,14 @@ import { chain, concat, isEmpty } from 'lodash';
 import { getWeb3ProviderLink } from '../Utils';
 import { IEventLogCrawlerOptions } from '../interfaces';
 import { CrawlStatus, ContractEvent } from '../entities';
-import BaseIntervalWorker from './BaseIntervalWorker';
+import { insertWebhookProgress } from '../webhook/helper';
+import BaseEventLogCrawler from './BaseEventLogCrawler';
 import pLimit from "p-limit";
 
 const Web3 = require("web3");
 const limit = pLimit(5);
 
-export class EventCrawlerByWeb3 extends BaseIntervalWorker {
+export class EventCrawlerByWeb3 extends BaseEventLogCrawler {
 
   constructor (options: IEventLogCrawlerOptions) {
     super(options);
@@ -48,7 +49,8 @@ export class EventCrawlerByWeb3 extends BaseIntervalWorker {
     );
 
     await getConnection().transaction(async (manager) => {
-        await this.saveEvents(manager, formatEventLogs, toBlockNumber);
+        const contractEvents: ContractEvent[] = await this.saveEvents(manager, formatEventLogs, toBlockNumber);
+        await this.insertWebhookProgress(manager, contractEvents);
         console.log(`Saved eventLogs !!!`);
     });
   }
@@ -81,7 +83,7 @@ export class EventCrawlerByWeb3 extends BaseIntervalWorker {
     return web3.eth.getBlock(blockNumber);
   }
 
-  private async saveEvents (manager: any, eventLogs: any[], lastBlockNumber: number): Promise<void> {
+  private async saveEvents (manager: any, eventLogs: any[], lastBlockNumber: number): Promise<ContractEvent[]> {
     const events: ContractEvent[] = chain(eventLogs)
         .filter((logEvent: any) => !!logEvent.event)
         .map((logEvent: any) => {
@@ -106,5 +108,18 @@ export class EventCrawlerByWeb3 extends BaseIntervalWorker {
     const lastCrawler = await crawlStatusRepo.findOne({ name: this.getContractConfig().name });
     lastCrawler.blockNumber = lastBlockNumber;
     await crawlStatusRepo.save(lastCrawler);
+
+    return events;
+  }
+
+  private async insertWebhookProgress (manager: any, events: ContractEvent[]): Promise<void> {
+    if (!this.getContractConfig().NEED_NOTIFY_BY_WEBHOOK) {
+      console.log(`Contract name '${this.getContractConfig().name}' doesn't configure nofitication!!!`);
+      return;
+    }
+
+    for (const item of events) {
+      await insertWebhookProgress(manager, item.id, this.getContractConfig().name, item.event);
+    }
   }
 }

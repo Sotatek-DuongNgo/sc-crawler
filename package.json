@@ -9,9 +9,7 @@
     "migration:down": "yarn typeorm migration:revert",
     "migration:create": "yarn typeorm migration:create -n",
     "lint": "tslint -c tslint.json 'libs/**/*.ts' 'bin/**/*.ts'",
-    "fix": "yarn lint -- --fix",
-    "build": "rm -rf dist/bin dist/libs && tsc",
-    "release": "release-it -n"
+    "fix": "yarn lint -- --fix"
   },
   "license": "ISC",
   "devDependencies": {
@@ -40,11 +38,13 @@
   "dependencies": {
     "@babel/preset-env": "^7.5.5",
     "@types/lodash": "^4.14.136",
+    "@types/node-fetch": "2.6.1",
     "@types/sqlite3": "3.1.5",
     "bignumber.js": "^9.0.1",
     "dotenv": "^10.0.0",
     "dotenv-safe": "^6.1.0",
     "express": "^4.17.1",
+    "node-fetch": "2.6.1",
     "p-limit": "2.2.0",
     "pg": "^8.7.3",
     "typeorm": "^0.2.44",

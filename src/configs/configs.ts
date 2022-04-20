@@ -14,7 +14,8 @@ export default {
             name: process.env.SC_AIRDROP_NAME,
             address: process.env.SC_AIRDROP_ADDRESS,
             abi: AIRDROP_JSON.abi,
-            firstBlock: process.env.SC_AIRDROP_FIRST_BLOCK
+            firstBlock: process.env.SC_AIRDROP_FIRST_BLOCK,
+            NEED_NOTIFY_BY_WEBHOOK: true
         }
     }
 };
