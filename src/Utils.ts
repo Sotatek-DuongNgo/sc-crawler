@@ -30,7 +30,7 @@ export const currentSecond = () => {
 }
 
 export const nowInMillis = () => {
-    return (Date.now() / 1000) | 0;
+    return Date.now();
 }
 
 export const sleeping = (ms: number) => {

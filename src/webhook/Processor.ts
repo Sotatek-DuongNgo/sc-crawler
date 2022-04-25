@@ -78,7 +78,9 @@ export class WebhookProcessor extends BaseIntervalWorker {
       msg = resp.statusText || JSON.stringify(resp.json());
 
       progressRecord.tryNum += 1;
-      if (status === 200) {
+
+      const httpStatusCodes: number[] = [200, 201];
+      if (httpStatusCodes.includes(status)) {
         progressRecord.isProcessed = true;
       } else {
         progressRecord.isProcessed = false;
@@ -112,6 +114,8 @@ export class WebhookProcessor extends BaseIntervalWorker {
       event: data.event,
       params: JSON.parse(data.returnValues),
       txHash: data.txHash,
+      blockNumber: data.blockNumber,
+      blockTime: data.blockTime
     };
   }
 }
